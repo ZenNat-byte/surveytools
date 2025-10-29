@@ -269,7 +269,8 @@ class TableSummarizer:
 
             columns = ["Row", "Group", "N"] + cols
             rows = [overall_row] + group_rows
-            result = pd.DataFrame(rows).reindex(columns=columns)
+            result = pd.DataFrame(rows, columns=columns)
+
             self.summary_table = result
             return result
 
@@ -326,6 +327,7 @@ class TableSummarizer:
                 overall_row[col] = self._fmt((w / total_w) if total_w > 0 else 0, denom=total_w)
 
         # order columns by overall %
+        
         all_columns = sorted(all_columns, key=lambda cat: overall_row.get(cat, 0), reverse=True)
 
         group_rows = []
@@ -389,7 +391,8 @@ class TableSummarizer:
 
         columns = ["Row", "Group", "N"] + all_columns
         rows = [overall_row] + group_rows
-        result = pd.DataFrame(rows).reindex(columns=columns)
+        result = pd.DataFrame(rows, columns=columns)
+
         self.summary_table = result
         return result
 
