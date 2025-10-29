@@ -128,6 +128,22 @@ class TableSummarizer:
             "Positive": props_by_num.get(4, 0.0) + props_by_num.get(5, 0.0),
         }
 
+    def _extract_score(self, x) -> Optional[int]:
+        """Parse 'label: 4' or 'label (4)' → 4; return None if not found."""
+        if pd.isna(x):
+            return None
+        s = str(x).strip()
+        m = re.search(r":\s*([0-9]+(?:\.[0-9]+)?)\s*$", s) or \
+            re.search(r"([0-9]+(?:\.[0-9]+)?)\s*\)?\s*$", s)
+        if not m:
+            return None
+        try:
+            v = float(m.group(1))
+            return int(round(v))
+        except Exception:
+            return None
+
+
     # ---------- heuristic question type ----------
     def detect_question_type(self, question_col: str) -> str:
         if question_col.strip().endswith("(open-ended)"):
