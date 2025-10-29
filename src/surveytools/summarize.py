@@ -268,7 +268,8 @@ class TableSummarizer:
                     group_rows.append(row)
 
             columns = ["Row", "Group", "N"] + cols
-            result = pd.DataFrame([overall_row] + group_rows, columns=columns)
+            rows = [overall_row] + group_rows
+            result = pd.DataFrame(rows).reindex(columns=columns)
             self.summary_table = result
             return result
 
@@ -285,7 +286,7 @@ class TableSummarizer:
 
         # split multi-select with '|' delimiter
         if temp["selected_choice"].str.contains("|", regex=False).any():
-            temp = temp.assign(selected_choice=temp["selected_choice"].str.split("|")).explode("selected_choice")
+            temp = temp.assign(selected_choice=temp["selected_choice"].str.split("|", regex=False)).explode("selected_choice")
             temp["selected_choice"] = temp["selected_choice"].str.strip()
 
         temp = temp[temp["selected_choice"].notna() & (temp["selected_choice"] != "")]
@@ -336,7 +337,7 @@ class TableSummarizer:
             temp_g, respondent_col = ensure_resp(temp_g)
             temp_g["selected_choice"] = temp_g["selected_choice"].astype(str)
             if temp_g["selected_choice"].str.contains("|", regex=False).any():
-                temp_g = temp_g.assign(selected_choice=temp_g["selected_choice"].str.split("|")).explode("selected_choice")
+                temp_g = temp_g.assign(selected_choice=temp_g["selected_choice"].str.split("|", regex=False)).explode("selected_choice")
                 temp_g["selected_choice"] = temp_g["selected_choice"].str.strip()
             temp_g = temp_g[temp_g["selected_choice"].notna() & (temp_g["selected_choice"] != "")]
             temp_unique_g = temp_g.drop_duplicates(subset=[respondent_col, "selected_choice"]).copy()
@@ -386,7 +387,9 @@ class TableSummarizer:
 
                 group_rows.append(row)
 
-        columns = ["Row", "Group", "N"] + all_columns
-        result = pd.DataFrame([overall_row] + group_rows, columns=columns)
+               columns = ["Row", "Group", "N"] + all_columns
+        rows = [overall_row] + group_rows
+        result = pd.DataFrame(rows).reindex(columns=columns)
         self.summary_table = result
         return result
+
