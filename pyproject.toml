@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "surveytools"
+version = "0.1.0"
+description = "Survey pipeline: Likert mapping UI → summaries → reporting (charts/PPTX) + CLI"
+requires-python = ">=3.9"
+dependencies = [
+  "pandas>=1.5",
+  "numpy>=1.24",
+  "openpyxl>=3.1",
+  "matplotlib>=3.7",
+  "python-pptx>=0.6.21",
+  "ftfy>=6.1; python_version >= '3.9'",
+]
+optional-dependencies = { widgets = ["ipywidgets>=8.0", "ipython>=8.0"] }
