@@ -47,11 +47,11 @@ class TableSummarizer:
             df = df.copy()
             df[weight_col] = 1.0
         return df
-
+    
     def _reshape_questions_to_long(self, df: pd.DataFrame, question: str,
-                                group_col: str, weight_col: str) -> pd.DataFrame:
+                                   group_col: str, weight_col: str) -> pd.DataFrame:
         cols = [group_col, weight_col, question]
-        # ✅ Avoid duplicating 'response_id'
+        # Avoid duplicating 'response_id' if it's already the group column
         if "response_id" in df.columns and group_col != "response_id":
             cols.append("response_id")
 
@@ -63,21 +63,6 @@ class TableSummarizer:
         temp["qid"] = question
         return temp
 
-
-   def _reshape_questions_to_long(self, df: pd.DataFrame, question: str,
-                               group_col: str, weight_col: str) -> pd.DataFrame:
-        cols = [group_col, weight_col, question]
-        # ✅ Avoid duplicating 'response_id'
-        if "response_id" in df.columns and group_col != "response_id":
-            cols.append("response_id")
-
-        temp = df[cols].copy()
-        temp = temp.rename(columns={question: "selected_choice"})
-        temp = temp[temp[weight_col].notna() & (temp[weight_col] != 0)]
-        temp = temp[temp["selected_choice"].notna() &
-                    (temp["selected_choice"].astype(str).str.strip() != "")]
-        temp["qid"] = question
-        return temp
 
 
     def _get_df_for_group(self, df: pd.DataFrame, group_col: str) -> pd.DataFrame:
