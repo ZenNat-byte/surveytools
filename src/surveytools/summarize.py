@@ -48,20 +48,21 @@ class TableSummarizer:
             df[weight_col] = 1.0
         return df
 
-    def _extract_score(self, x) -> Optional[int]:
-        """Parse 'label: 4' or 'label (4)' → 4; return None if not found."""
-        if pd.isna(x):
-            return None
-        s = str(x).strip()
-        m = re.search(r":\s*([0-9]+(?:\.[0-9]+)?)\s*$", s) or \
-            re.search(r"([0-9]+(?:\.[0-9]+)?)\s*\)?\s*$", s)
-        if not m:
-            return None
-        try:
-            v = float(m.group(1))
-            return int(round(v))
-        except Exception:
-            return None
+    def _reshape_questions_to_long(self, df: pd.DataFrame, question: str,
+                                group_col: str, weight_col: str) -> pd.DataFrame:
+        cols = [group_col, weight_col, question]
+        # ✅ Avoid duplicating 'response_id'
+        if "response_id" in df.columns and group_col != "response_id":
+            cols.append("response_id")
+
+        temp = df[cols].copy()
+        temp = temp.rename(columns={question: "selected_choice"})
+        temp = temp[temp[weight_col].notna() & (temp[weight_col] != 0)]
+        temp = temp[temp["selected_choice"].notna() &
+                    (temp["selected_choice"].astype(str).str.strip() != "")]
+        temp["qid"] = question
+        return temp
+
 
    def _reshape_questions_to_long(self, df: pd.DataFrame, question: str,
                                group_col: str, weight_col: str) -> pd.DataFrame:
