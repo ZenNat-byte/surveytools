@@ -387,7 +387,7 @@ class TableSummarizer:
 
                 group_rows.append(row)
 
-               columns = ["Row", "Group", "N"] + all_columns
+        columns = ["Row", "Group", "N"] + all_columns
         rows = [overall_row] + group_rows
         result = pd.DataFrame(rows).reindex(columns=columns)
         self.summary_table = result
