@@ -63,11 +63,13 @@ class TableSummarizer:
         except Exception:
             return None
 
-    def _reshape_questions_to_long(self, df: pd.DataFrame, question: str,
-                                   group_col: str, weight_col: str) -> pd.DataFrame:
+   def _reshape_questions_to_long(self, df: pd.DataFrame, question: str,
+                               group_col: str, weight_col: str) -> pd.DataFrame:
         cols = [group_col, weight_col, question]
-        if "response_id" in df.columns:
+        # ✅ Avoid duplicating 'response_id'
+        if "response_id" in df.columns and group_col != "response_id":
             cols.append("response_id")
+
         temp = df[cols].copy()
         temp = temp.rename(columns={question: "selected_choice"})
         temp = temp[temp[weight_col].notna() & (temp[weight_col] != 0)]
@@ -75,6 +77,7 @@ class TableSummarizer:
                     (temp["selected_choice"].astype(str).str.strip() != "")]
         temp["qid"] = question
         return temp
+
 
     def _get_df_for_group(self, df: pd.DataFrame, group_col: str) -> pd.DataFrame:
         if group_col == "ethnicities":
