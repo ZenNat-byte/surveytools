@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: surveytools
+Version: 0.1.0
+Summary: Survey pipeline: Likert mapping UI → summaries → reporting (charts/PPTX) + CLI
+Requires-Python: >=3.9
+Requires-Dist: pandas>=1.5
+Requires-Dist: numpy>=1.24
+Requires-Dist: openpyxl>=3.1
+Requires-Dist: matplotlib>=3.7
+Requires-Dist: python-pptx>=0.6.21
+Requires-Dist: ftfy>=6.1; python_version >= "3.9"
+Provides-Extra: widgets
+Requires-Dist: ipywidgets>=8.0; extra == "widgets"
+Requires-Dist: ipython>=8.0; extra == "widgets"
