@@ -15,4 +15,12 @@ dependencies = [
   "python-pptx>=0.6.21",
   "ftfy>=6.1; python_version >= '3.9'",
 ]
-optional-dependencies = { widgets = ["ipywidgets>=8.0", "ipython>=8.0"] }
+
+[project.optional-dependencies]
+widgets = ["ipywidgets>=8.0", "ipython>=8.0"]
+
+[project.scripts]
+surveytools = "surveytools.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
