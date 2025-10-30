@@ -60,12 +60,13 @@ def main(argv=None) -> int:
     df = fill_client_tokens(fix_df_text(df))
 
     # Config + summarizer
+    
     cfg = SummaryConfig(
-        output_mode=a.mode,
-        decimals=a.decimals,
-        as_percent=(a.mode=="percent"),
-        multiselect_delimiter=a.delimiter
-    )
+            output_mode=a.mode,
+            decimals=a.decimals,
+            as_percent=(a.mode=="percent"),
+        )
+
     summ = TableSummarizer(df, cfg)
 
     # Question selection

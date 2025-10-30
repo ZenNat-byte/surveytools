@@ -2,6 +2,7 @@ pyproject.toml
 src/surveytools/__init__.py
 src/surveytools/bulk_assistant.py
 src/surveytools/cleaning.py
+src/surveytools/cli.py
 src/surveytools/constants.py
 src/surveytools/likert_mapper.py
 src/surveytools/report_assistant.py
